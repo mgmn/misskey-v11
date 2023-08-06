@@ -13,19 +13,6 @@
 		<div class="signin">
 			<a href="/signin" @click.prevent="signin()">{{ $t('@.signin') }}</a>
 		</div>
-		<div class="tl">
-			<mk-welcome-timeline/>
-		</div>
-		<div class="hashtags">
-			<mk-tag-cloud/>
-		</div>
-		<div class="photos">
-			<div v-for="photo in photos" :style="`background-image: url(${photo.thumbnailUrl})`"></div>
-		</div>
-		<div class="stats" v-if="stats">
-			<span><fa icon="user"/> {{ stats.originalUsersCount | number }}</span>
-			<span><fa icon="pencil-alt"/> {{ stats.originalNotesCount | number }}</span>
-		</div>
 		<div class="announcements" v-if="announcements && announcements.length > 0">
 			<article v-for="announcement in announcements">
 				<span class="title" v-html="announcement.title"></span>
@@ -33,41 +20,6 @@
 				<img v-if="announcement.image" :src="announcement.image" alt="" style="display: block; max-height: 120px; max-width: 100%;"/>
 			</article>
 		</div>
-		<article class="about-misskey">
-			<h1>{{ $t('@.intro.title') }}</h1>
-			<p v-html="this.$t('@.intro.about')"></p>
-			<section>
-				<h2>{{ $t('@.intro.features') }}</h2>
-				<section>
-					<h3>{{ $t('@.intro.rich-contents') }}</h3>
-					<div class="image"><img src="/assets/about/post.png" alt=""></div>
-					<p v-html="this.$t('@.intro.rich-contents-desc')"></p>
-				</section>
-				<section>
-					<h3>{{ $t('@.intro.reaction') }}</h3>
-					<div class="image"><img src="/assets/about/reaction.png" alt=""></div>
-					<p v-html="this.$t('@.intro.reaction-desc')"></p>
-				</section>
-				<section>
-					<h3>{{ $t('@.intro.ui') }}</h3>
-					<div class="image"><img src="/assets/about/ui.png" alt=""></div>
-					<p v-html="this.$t('@.intro.ui-desc')"></p>
-				</section>
-				<section>
-					<h3>{{ $t('@.intro.drive') }}</h3>
-					<div class="image"><img src="/assets/about/drive.png" alt=""></div>
-					<p v-html="this.$t('@.intro.drive-desc')"></p>
-				</section>
-			</section>
-			<p v-html="this.$t('@.intro.outro')"></p>
-		</article>
-		<div class="info" v-if="meta">
-			<p>Version: <b>{{ meta.version }}</b></p>
-			<p>Maintainer: <b><a :href="'mailto:' + meta.maintainerEmail" target="_blank">{{ meta.maintainerName }}</a></b></p>
-		</div>
-		<footer>
-			<small>{{ copyright }}</small>
-		</footer>
 	</div>
 </div>
 </template>
@@ -75,7 +27,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import i18n from '../../../i18n';
-import { copyright, host } from '../../../config';
+import { host } from '../../../config';
 import { concat } from '../../../../../prelude/array';
 import { toUnicode } from 'punycode/';
 
@@ -84,7 +36,6 @@ export default Vue.extend({
 	data() {
 		return {
 			meta: null,
-			copyright,
 			stats: null,
 			banner: null,
 			host: toUnicode(host),
@@ -193,47 +144,9 @@ export default Vue.extend({
 				margin 8px
 
 			> .signup
-				font-weight bold
-
-		> .signin
-			margin 16px 0
-
-		> .tl
-			margin 16px 0
-
-			> *
-				max-height 300px
-				border-radius 6px
-				overflow auto
-				-webkit-overflow-scrolling touch
-
-		> .hashtags
-			padding 0 8px
-			height 200px
-
-		> .photos
-			display grid
-			grid-template-rows 1fr 1fr 1fr
-			grid-template-columns 1fr 1fr
-			gap 8px
-			height 300px
-			margin-top 16px
-
-			> div
-				border-radius 4px
-				background-position center center
-				background-size cover
-
-		> .stats
-			margin 16px 0
-			padding 8px
-			font-size 14px
-			color var(--text)
-			background rgba(#000, 0.1)
-			border-radius 6px
-
-			> *
-				margin 0 8px
+			> .signin
+			> .explore
+				margin 0.5em
 
 		> .announcements
 			margin 16px 0
@@ -288,15 +201,6 @@ export default Vue.extend({
 							width 100%
 							height 120px
 							object-fit cover
-
-		> .info
-			padding 16px 0
-			border solid 2px rgba(0, 0, 0, 0.1)
-			border-radius 8px
-			color var(--text)
-
-			> *
-				margin 0 16px
 
 		> footer
 			text-align center
