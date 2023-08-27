@@ -41,7 +41,6 @@ export default Vue.extend({
 			host: toUnicode(host),
 			name: null,
 			description: '',
-			photos: [],
 			announcements: []
 		};
 	},
@@ -56,23 +55,6 @@ export default Vue.extend({
 
 		this.$root.api('stats').then(stats => {
 			this.stats = stats;
-		});
-
-		const image = [
-			'image/jpeg',
-			'image/png',
-			'image/gif',
-			'image/apng',
-			'image/vnd.mozilla.apng',
-		];
-
-		this.$root.api('notes/local-timeline', {
-			fileType: image,
-			excludeNsfw: true,
-			limit: 6
-		}).then((notes: any[]) => {
-			const files = concat(notes.map((n: any): any[] => n.files));
-			this.photos = files.filter(f => image.includes(f.type)).slice(0, 6);
 		});
 	},
 	methods: {
