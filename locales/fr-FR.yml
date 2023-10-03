@@ -208,7 +208,7 @@ common:
     default-note-visibility: "Visibilité par défaut"
     remember-note-visibility: "Se souvenir du mode de visibilité de la publication"
     web-search-engine: "Moteur de recherche Web"
-    web-search-engine-desc: "Exemple : https://www.google.com/?#q={{query}}"
+    web-search-engine-desc: "Exemple : https://www.google.com/search?q={{query}}"
     paste: "Coller"
     pasted-file-name: "Modèle de nom de fichier collé"
     pasted-file-name-desc: "Exemple : \"yyyy-MM-dd HH-mm-ss [{{number}}]\" → \"2018-03-20 21-30-24 1\""
