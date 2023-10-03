@@ -208,7 +208,7 @@ common:
     default-note-visibility: "기본 공개 범위"
     remember-note-visibility: "글의 공개 범위를 기억하기"
     web-search-engine: "웹 검색엔진"
-    web-search-engine-desc: "예: https://www.google.com/?#q={{query}}"
+    web-search-engine-desc: "예: https://www.google.com/search?q={{query}}"
     paste: "붙여넣기"
     pasted-file-name: "붙여넣은 파일의 이름 템플릿"
     pasted-file-name-desc: "예시: \"yyyy-MM-dd HH-mm-ss [{{number}}]\" → \"2018-03-20 21-30-24 1\""

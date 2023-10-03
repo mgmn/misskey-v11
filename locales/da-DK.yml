@@ -173,7 +173,7 @@ common:
     default-note-visibility: "Standard synlighed"
     remember-note-visibility: "Husk post synlighed"
     web-search-engine: "Søgemaskine"
-    web-search-engine-desc: "Eksempel: https://www.google.com/?#q={{query}}"
+    web-search-engine-desc: "Eksempel: https://www.google.com/search?q={{query}}"
     keep-cw: "Bevar indholdsvarsel"
     keep-cw-desc: "Det indholdsvarsel, som står på det oprindelige indlæg, vil som standard blive overført til eventuelle svar på indlægget."
     i-like-sushi: "Jeg foretrækker sushi frem for budding"

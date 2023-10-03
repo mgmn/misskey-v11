@@ -187,7 +187,7 @@ common:
     note-visibility: "Visibilidad de la publicación"
     default-note-visibility: "Rango de publicación predeterminado"
     web-search-engine: "Buscador web"
-    web-search-engine-desc: "Ejemplo: https://www.google.com/?#q={{query}}"
+    web-search-engine-desc: "Ejemplo: https://www.google.com/search?q={{query}}"
     keep-cw: "Mantener CW"
     this-setting-is-this-device-only: "Solo para este dispositivo"
     use-os-default-emojis: "Usar los emoticonos estándar del sistema operativo"
