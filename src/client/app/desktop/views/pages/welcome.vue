@@ -24,15 +24,16 @@
 						</span>
 					</div>
 
-					<div class="desc">
+					<div class="desc" style="padding-right: 120px">
 						<span class="desc" v-html="description || $t('@.about')"></span>
-						<a class="about" @click="about">{{ $t('about') }}</a>
 					</div>
 
 					<p class="sign">
 						<span class="signup" @click="signup">{{ $t('@.signup') }}</span>
 						<span class="divider">|</span>
 						<span class="signin" @click="signin">{{ $t('@.signin') }}</span>
+						<span class="divider">|</span>
+						<span class="explore" @click="explore">{{ $t('@.explore') }}</span>
 					</p>
 
 					<img v-if="meta" :src="meta.mascotImageUrl" alt="" title="藍" class="char">
@@ -120,7 +121,11 @@ export default Vue.extend({
 				key: 'darkmode',
 				value: !this.$store.state.device.darkmode
 			});
-		}
+		},
+			
+		explore() {
+			this.$router.push(`/explore`);
+		},
 	}
 });
 </script>
