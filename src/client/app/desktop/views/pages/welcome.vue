@@ -24,15 +24,16 @@
 						</span>
 					</div>
 
-					<div class="desc">
+					<div class="desc" style="padding-right: 120px">
 						<span class="desc" v-html="description || $t('@.about')"></span>
-						<a class="about" @click="about">{{ $t('about') }}</a>
 					</div>
 
 					<p class="sign">
 						<span class="signup" @click="signup">{{ $t('@.signup') }}</span>
 						<span class="divider">|</span>
 						<span class="signin" @click="signin">{{ $t('@.signin') }}</span>
+						<span class="divider">|</span>
+						<span class="explore" @click="explore">{{ $t('@.explore') }}</span>
 					</p>
 
 					<img v-if="meta" :src="meta.mascotImageUrl" alt="" title="藍" class="char">
@@ -50,90 +51,14 @@
 				</div>
 			</div>
 
-			<div class="photos block">
-				<header><fa :icon="['far', 'images']"/> {{ $t('photos') }}</header>
-				<div>
-					<div v-for="photo in photos" :style="`background-image: url(${photo.thumbnailUrl})`"></div>
-				</div>
-			</div>
-
-			<div class="tag-cloud block">
-				<div>
-					<mk-tag-cloud/>
-				</div>
-			</div>
-
 			<div class="nav block">
 				<div>
 					<mk-nav class="nav"/>
 				</div>
 			</div>
 
-			<div class="side">
-				<div class="trends block">
-					<div>
-						<mk-trends/>
-					</div>
-				</div>
-
-				<div class="tl block">
-					<header><fa :icon="['far', 'comment-alt']"/> {{ $t('timeline') }}</header>
-					<div>
-						<mk-welcome-timeline class="tl" :max="20"/>
-					</div>
-				</div>
-
-				<div class="info block">
-					<header><fa icon="info-circle"/> {{ $t('info') }}</header>
-					<div>
-						<div v-if="meta" class="body">
-							<p>Version: <b>{{ meta.version }}</b></p>
-							<p>Maintainer: <b><a :href="'mailto:' + meta.maintainerEmail" target="_blank">{{ meta.maintainerName }}</a></b></p>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</main>
-
-	<modal name="about" class="about modal" width="800px" height="auto" scrollable>
-		<article class="fpdezooorhntlzyeszemrsqdlgbysvxq">
-			<h1>{{ $t('@.intro.title') }}</h1>
-			<p v-html="this.$t('@.intro.about')"></p>
-			<section>
-				<h2>{{ $t('@.intro.features') }}</h2>
-				<section>
-					<div class="body">
-						<h3>{{ $t('@.intro.rich-contents') }}</h3>
-						<p v-html="this.$t('@.intro.rich-contents-desc')"></p>
-					</div>
-					<div class="image"><img src="/assets/about/post.png" alt=""></div>
-				</section>
-				<section>
-					<div class="body">
-						<h3>{{ $t('@.intro.reaction') }}</h3>
-						<p v-html="this.$t('@.intro.reaction-desc')"></p>
-					</div>
-					<div class="image"><img src="/assets/about/reaction.png" alt=""></div>
-				</section>
-				<section>
-					<div class="body">
-						<h3>{{ $t('@.intro.ui') }}</h3>
-						<p v-html="this.$t('@.intro.ui-desc')"></p>
-					</div>
-					<div class="image"><img src="/assets/about/ui.png" alt=""></div>
-				</section>
-				<section>
-					<div class="body">
-						<h3>{{ $t('@.intro.drive') }}</h3>
-						<p v-html="this.$t('@.intro.drive-desc')"></p>
-					</div>
-					<div class="image"><img src="/assets/about/drive.png" alt=""></div>
-				</section>
-			</section>
-			<p v-html="this.$t('@.intro.outro')"></p>
-		</article>
-	</modal>
 
 	<modal name="signup" class="modal" width="450px" height="auto" scrollable>
 		<header class="formHeader">{{ $t('@.signup') }}</header>
@@ -150,7 +75,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import i18n from '../../../i18n';
-import { host, copyright } from '../../../config';
+import { host } from '../../../config';
 import { concat } from '../../../../../prelude/array';
 import { toUnicode } from 'punycode/';
 
@@ -161,12 +86,10 @@ export default Vue.extend({
 			meta: null,
 			stats: null,
 			banner: null,
-			copyright,
 			host: toUnicode(host),
 			name: null,
 			description: '',
 			announcements: [],
-			photos: []
 		};
 	},
 
@@ -182,30 +105,9 @@ export default Vue.extend({
 		this.$root.api('stats').then(stats => {
 			this.stats = stats;
 		});
-
-		const image = [
-			'image/jpeg',
-			'image/png',
-			'image/gif',
-			'image/apng',
-			'image/vnd.mozilla.apng',
-		];
-
-		this.$root.api('notes/local-timeline', {
-			fileType: image,
-			excludeNsfw: true,
-			limit: 6
-		}).then((notes: any[]) => {
-			const files = concat(notes.map((n: any): any[] => n.files));
-			this.photos = files.filter(f => image.includes(f.type)).slice(0, 6);
-		});
 	},
 
 	methods: {
-		about() {
-			this.$modal.show('about');
-		},
-
 		signup() {
 			this.$modal.show('signup');
 		},
@@ -219,7 +121,11 @@ export default Vue.extend({
 				key: 'darkmode',
 				value: !this.$store.state.device.darkmode
 			});
-		}
+		},
+			
+		explore() {
+			this.$router.push(`/explore`);
+		},
 	}
 });
 </script>
@@ -248,10 +154,6 @@ export default Vue.extend({
 
 		.formHeader
 			border-bottom solid 1px rgba(#000, 0.2)
-
-.v--modal-overlay.about
-	.v--modal-box.v--modal
-		margin 32px 0
 
 .fpdezooorhntlzyeszemrsqdlgbysvxq
 	padding 64px
@@ -342,12 +244,13 @@ export default Vue.extend({
 		margin 0 auto
 		padding 64px
 		width 100%
-		max-width 1200px
+		max-width 870px
 
 		.block
 			color var(--text)
 			background var(--face)
 			overflow auto
+			margin 1em
 
 			> header
 				z-index 1
@@ -363,19 +266,12 @@ export default Vue.extend({
 				overflow auto
 
 		> .body
-			display grid
-			grid-template-rows 390px 1fr 256px 64px
-			grid-template-columns 1fr 1fr 350px
-			gap 16px
-			height 1150px
-
 			> .main
-				grid-row 1
-				grid-column 1 / 3
+				border-radius 6px
 
 				> div
 					padding 32px
-					min-height 100%
+					min-height 390px
 
 					> h1
 						margin 0
@@ -428,8 +324,8 @@ export default Vue.extend({
 						z-index 1
 
 			> .announcements
-				grid-row 2
-				grid-column 1
+				border-radius 6px
+				height 390px
 
 				> div
 					padding 32px
@@ -443,67 +339,12 @@ export default Vue.extend({
 							margin 0
 							font-size 1.25em
 
-			> .photos
-				grid-row 2
-				grid-column 2
-
-				> div
-					display grid
-					grid-template-rows 1fr 1fr 1fr
-					grid-template-columns 1fr 1fr
-					gap 8px
-					height 100%
-					padding 16px
-
-					> div
-						//border-radius 4px
-						background-position center center
-						background-size cover
-
-			> .tag-cloud
-				grid-row 3
-				grid-column 1 / 3
-
-				> div
-					height 256px
-					padding 32px
-
 			> .nav
 				display flex
 				justify-content center
 				align-items center
-				grid-row 4
-				grid-column 1 / 3
 				font-size 14px
-
-			> .side
-				display grid
-				grid-row 1 / 5
-				grid-column 3
-				grid-template-rows 1fr 350px
-				grid-template-columns 1fr
-				gap 16px
-
-				> .tl
-					grid-row 1
-					grid-column 1
-					overflow auto
-
-				> .trends
-					grid-row 2
-					grid-column 1
-					padding 8px
-
-				> .info
-					grid-row 3
-					grid-column 1
-
-					> div
-						padding 16px
-
-						> .body
-							> p
-								display block
-								margin 0
-
+				border-radius 6px
+				margin 1em
+				padding 1em
 </style>
