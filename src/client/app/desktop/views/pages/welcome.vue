@@ -32,8 +32,8 @@
 						<span class="signup" @click="signup">{{ $t('@.signup') }}</span>
 						<span class="divider">|</span>
 						<span class="signin" @click="signin">{{ $t('@.signin') }}</span>
-						<span class="divider">|</span>
-						<span class="explore" @click="explore">{{ $t('@.explore') }}</span>
+						<span class="divider" v-if="meta && !(meta.authorizedProfileDirectory || meta.disableProfileDirectory)">|</span>
+						<span class="explore" @click="explore" v-if="meta && !(meta.authorizedProfileDirectory || meta.disableProfileDirectory)">{{ $t('@.explore') }}</span>
 					</p>
 
 					<img v-if="meta" :src="meta.mascotImageUrl" alt="" title="藍" class="char">

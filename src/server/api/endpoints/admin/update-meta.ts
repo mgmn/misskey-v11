@@ -44,6 +44,20 @@ export const meta = {
 			}
 		},
 
+		authorizedProfileDirectory: {
+			validator: $.optional.nullable.bool,
+			desc: {
+				'ja-JP': '「みつける」の表示に認証を必要とするか否か'
+			}
+		},
+
+		disableProfileDirectory: {
+			validator: $.optional.nullable.bool,
+			desc: {
+				'ja-JP': '「みつける」を無効にするか否か'
+			}
+		},
+
 		enableEmojiReaction: {
 			validator: $.optional.nullable.bool,
 			desc: {
@@ -439,6 +453,14 @@ export default define(meta, async (ps, me) => {
 
 	if (typeof ps.disableGlobalTimeline === 'boolean') {
 		set.disableGlobalTimeline = ps.disableGlobalTimeline;
+	}
+
+	if (typeof ps.authorizedProfileDirectory === 'boolean') {
+		set.authorizedProfileDirectory = ps.authorizedProfileDirectory;
+	}
+
+	if (typeof ps.disableProfileDirectory === 'boolean') {
+		set.disableProfileDirectory = ps.disableProfileDirectory;
 	}
 
 	if (typeof ps.enableEmojiReaction === 'boolean') {
