@@ -43,6 +43,10 @@
 			<ui-info>{{ $t('disabling-timelines-info') }}</ui-info>
 		</section>
 		<section>
+			<ui-switch v-model="authorizedProfileDirectory" :disabled="disableProfileDirectory">{{ $t('authorized-profile-directory') }}</ui-switch>
+			<ui-switch v-model="disableProfileDirectory">{{ $t('disable-profile-directory') }}</ui-switch>
+		</section>
+		<section>
 			<ui-switch v-model="enableEmojiReaction">{{ $t('enable-emoji-reaction') }}</ui-switch>
 			<ui-switch v-model="useStarForReactionFallback">{{ $t('use-star-for-reaction-fallback') }}</ui-switch>
 		</section>
@@ -270,6 +274,8 @@ export default Vue.extend({
 			disableRegistration: false,
 			disableLocalTimeline: false,
 			disableGlobalTimeline: false,
+			authorizedProfileDirectory: false,
+			disableProfileDirectory: false,
 			enableEmojiReaction: true,
 			useStarForReactionFallback: false,
 			mascotImageUrl: null,
@@ -338,6 +344,8 @@ export default Vue.extend({
 			this.disableRegistration = meta.disableRegistration;
 			this.disableLocalTimeline = meta.disableLocalTimeline;
 			this.disableGlobalTimeline = meta.disableGlobalTimeline;
+			this.authorizedProfileDirectory = meta.authorizedProfileDirectory;
+			this.disableProfileDirectory = meta.disableProfileDirectory;
 			this.enableEmojiReaction = meta.enableEmojiReaction;
 			this.useStarForReactionFallback = meta.useStarForReactionFallback;
 			this.mascotImageUrl = meta.mascotImageUrl;
@@ -481,6 +489,8 @@ export default Vue.extend({
 				disableRegistration: this.disableRegistration,
 				disableLocalTimeline: this.disableLocalTimeline,
 				disableGlobalTimeline: this.disableGlobalTimeline,
+				authorizedProfileDirectory: this.authorizedProfileDirectory,
+				disableProfileDirectory: this.disableProfileDirectory,
 				enableEmojiReaction: this.enableEmojiReaction,
 				useStarForReactionFallback: this.useStarForReactionFallback,
 				mascotImageUrl: this.mascotImageUrl,
