@@ -307,6 +307,7 @@ export default Vue.extend({
 
 						> .signin
 						> .signup
+						> .explore
 							cursor pointer
 
 							&:hover
