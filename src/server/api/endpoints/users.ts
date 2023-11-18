@@ -2,6 +2,7 @@ import $ from 'cafy';
 import define from '../define';
 import { Users } from '../../../models';
 import { generateMuteQueryForUsers } from '../common/generate-mute-query';
+import { fetchMeta } from '../../../misc/fetch-meta';
 
 export const meta = {
 	tags: ['users'],
@@ -63,6 +64,14 @@ export const meta = {
 };
 
 export default define(meta, async (ps, me) => {
+	const serverMeta = await fetchMeta();
+	if (
+		serverMeta.disableProfileDirectory ||
+		me == null && serverMeta.authorizedProfileDirectory
+	) {
+		return [];
+	}
+
 	const query = Users.createQueryBuilder('user');
 	query.where('user.isExplorable = TRUE');
 
