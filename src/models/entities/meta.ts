@@ -57,6 +57,11 @@ export class Meta {
 	@Column('boolean', {
 		default: false,
 	})
+	public authorizedPublicTimeline: boolean;
+
+	@Column('boolean', {
+		default: false,
+	})
 	public authorizedProfileDirectory: boolean;
 
 	@Column('boolean', {
