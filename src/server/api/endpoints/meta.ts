@@ -83,6 +83,11 @@ export const meta = {
 				optional: false as const, nullable: false as const,
 				description: 'Whether disabled GTL.',
 			},
+			authorizedPublicTimeline: {
+				type: 'boolean' as const,
+				optional: false as const, nullable: false as const,
+				description: 'Whether require login to view public timelines.',
+			},
 			authorizedProfileDirectory: {
 				type: 'boolean' as const,
 				optional: false as const, nullable: false as const,
@@ -148,6 +153,7 @@ export default define(meta, async (ps, me) => {
 		disableRegistration: instance.disableRegistration,
 		disableLocalTimeline: instance.disableLocalTimeline,
 		disableGlobalTimeline: instance.disableGlobalTimeline,
+		authorizedPublicTimeline: instance.authorizedPublicTimeline,
 		authorizedProfileDirectory: instance.authorizedProfileDirectory,
 		disableProfileDirectory: instance.disableProfileDirectory,
 		enableEmojiReaction: instance.enableEmojiReaction,
