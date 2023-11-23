@@ -1443,6 +1443,7 @@ admin/views/instance.vue:
   disable-local-timeline: "ローカルタイムラインを無効にする"
   disable-global-timeline: "グローバルタイムラインを無効にする"
   disabling-timelines-info: "これらのタイムラインを無効にしても、管理者およびモデレーターは引き続き利用できます。"
+  authorized-public-timeline: "未認証時の公開タイムラインを無効にする"
   authorized-profile-directory: "未認証時の「みつける」を無効にする"
   disable-profile-directory: "「みつける」を無効にする"
   enable-emoji-reaction: "リアクションに絵文字を使えるようにする"
