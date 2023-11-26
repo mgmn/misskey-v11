@@ -6,7 +6,7 @@ import loadConfig from '../src/config/load';
 import { SIGKILL } from 'constants';
 import { createConnection, getConnection } from 'typeorm';
 import { entities } from '../src/db/postgre';
-import { getHtml } from '../src/misc/fetch';
+import { getHtml, getResponse } from '../src/misc/fetch';
 import { JSDOM } from 'jsdom';
 import * as FormData from 'form-data';
 import got from 'got';
@@ -159,7 +159,7 @@ export const uploadFile = async (user: any, _path?: string): Promise<any> => {
 
 	const formData = new FormData();
 	formData.append('i', user.token);
-	formData.append('file', fs.createReadStream(absPath));
+	formData.append('file', fs.createReadStream(absPath), encodeURIComponent(absPath.split(/(\\|\/)/g).pop()));
 	formData.append('force', 'true');
 
 	const res = await got<string>(`http://localhost:${port}/api/drive/files/create`, {
@@ -206,4 +206,21 @@ export const getDocument = async (path: string): Promise<Document> => {
 	const { window } = new JSDOM(html);
 	const doc = window.document;
 	return doc;
+};
+
+export const getJsonDocument = async (path: string, body?: Record<string, string>): Promise<any> => {
+	const res = await getResponse({
+		url: `http://localhost:${port}${path}`,
+		method: 'POST',
+		headers: {
+			'User-Agent': config.userAgent,
+			Accept: 'application/json, */*'
+		},
+		body: JSON.stringify(body || {}),
+		timeout: 10000
+	});
+
+	if (res.body.length > 65536) throw new Error('too large JSON');
+
+	return await JSON.parse(res.body); 
 };
