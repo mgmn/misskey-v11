@@ -3,6 +3,7 @@ import define from '../../define';
 import { generateMuteQuery } from '../../common/generate-mute-query';
 import { Notes } from '../../../../models';
 import { generateBlockedUserQuery } from '../../common/generate-block-query';
+import { fetchMeta } from '../../../../misc/fetch-meta';
 
 export const meta = {
 	desc: {
@@ -36,6 +37,14 @@ export const meta = {
 };
 
 export default define(meta, async (ps, user) => {
+	const serverMeta = await fetchMeta();
+	if (
+		serverMeta.disableLocalTimeline ||
+		user == null && serverMeta.authorizedPublicTimeline
+	) {
+		return [];
+	}
+
 	const day = 1000 * 60 * 60 * 24 * 3; // 3日前まで
 
 	const query = Notes.createQueryBuilder('note')
