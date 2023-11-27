@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class metaDisablePublicTimeline1700724458006 implements MigrationInterface {
-    name = 'metaDisablePublicTimeline1700724458006'
+export class metaAuthorizedPublicTimeline1701106923260 implements MigrationInterface {
+    name = 'metaAuthorizedPublicTimeline1701106923260'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "meta" ADD "authorizedPublicTimeline" boolean NOT NULL DEFAULT false`);
