@@ -3,7 +3,7 @@ import config from '../config';
 import * as coBody from 'co-body';
 import * as crypto from 'crypto';
 import { IActivity } from '../remote/activitypub/type';
-import * as httpSignature from 'http-signature';
+import * as httpSignature from '@peertube/http-signature';
 import Logger from '../services/logger';
 import { inspect } from 'util';
 
@@ -32,7 +32,9 @@ const router = new Router();
 
 async function inbox(ctx: Router.RouterContext) {
 	if (ctx.req.headers.host !== config.host) {
+		logger.warn(`inbox: Invalid Host`);
 		ctx.status = 400;
+		ctx.message = 'Invalid Host';
 		return;
 	}
 
@@ -43,6 +45,11 @@ async function inbox(ctx: Router.RouterContext) {
 	});
 	ctx.request.body = parsed;
 
+	if (raw == null) {
+		ctx.status = 400;
+		return;
+	}
+
 	let signature: httpSignature.IParsedSignature;
 
 	try {
@@ -50,7 +57,25 @@ async function inbox(ctx: Router.RouterContext) {
 	} catch (e) {
 		logger.warn(`inbox: signature parse error: ${inspect(e)}`);
 		ctx.status = 401;
+
+		if (e instanceof Error) {
+			if (e.name === 'ExpiredRequestError') ctx.message = 'Expired Request Error';
+			if (e.name === 'MissingHeaderError') ctx.message = 'Missing Required Header';
+		}
+
 		return;
+	}
+
+	// Validate signature algorithm
+	if (!signature.algorithm.toLowerCase().match(/^((dsa|rsa|ecdsa)-(sha256|sha384|sha512)|ed25519-sha512|hs2019)$/)) {
+		logger.warn(`inbox: invalid signature algorithm ${signature.algorithm}`);
+		ctx.status = 401;
+		ctx.message = 'Invalid Signature Algorithm';
+		return;
+
+		// hs2019
+		// keyType=ED25519 => ed25519-sha512
+		// keyType=other => (keyType)-sha256
 	}
 
 	// Digestヘッダーの検証
@@ -60,6 +85,7 @@ async function inbox(ctx: Router.RouterContext) {
 	if (typeof digest !== 'string') {
 		logger.warn(`inbox: unrecognized digest header 1`);
 		ctx.status = 401;
+		ctx.message = 'Invalid Digest Header';
 		return;
 	}
 
@@ -68,6 +94,7 @@ async function inbox(ctx: Router.RouterContext) {
 	if (match == null) {
 		logger.warn(`inbox: unrecognized digest header 2`);
 		ctx.status = 401;
+		ctx.message = 'Invalid Digest Header';
 		return;
 	}
 
@@ -75,16 +102,18 @@ async function inbox(ctx: Router.RouterContext) {
 	const digestExpected = match[2];
 
 	if (digestAlgo.toUpperCase() !== 'SHA-256') {
-		logger.warn(`inbox: unsupported algorithm`);
+		logger.warn(`inbox: Unsupported Digest Algorithm`);
 		ctx.status = 401;
+		ctx.message = 'Unsupported Digest Algorithm';
 		return;
 	}
 
 	const digestActual = crypto.createHash('sha256').update(raw).digest('base64');
 
 	if (digestExpected !== digestActual) {
-		logger.warn(`inbox: digest missmatch`);
+		logger.warn(`inbox: Digest Missmatch`);
 		ctx.status = 401;
+		ctx.message = 'Digest Missmatch';
 		return;
 	}
 
