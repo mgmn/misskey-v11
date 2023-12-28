@@ -3,6 +3,7 @@ import { renderActivity } from '../remote/activitypub/renderer';
 import { deliver } from '../queue';
 import config from '../config';
 import deleteFollowing from '../services/following/delete';
+import rejectFollowing from '../services/following/requests/reject';
 import { User } from '../models/entities/user';
 import { Users, Followings, Notifications } from '../models';
 import { Not, IsNull, Brackets } from 'typeorm';
@@ -10,6 +11,7 @@ import { processStreamingRows } from '../misc/process-streaming-rows';
 
 export async function doPostSuspend(user: User) {
 	await unFollowAll(user).catch(e => {});
+	await rejectFollowAll(user).catch(e => {});
 	await readAllNotify(user).catch(e => {});
 	await sendDeleteActivity(user).catch(e => {});
 }
@@ -65,6 +67,24 @@ async function unFollowAll(follower: User) {
 		}
 
 		await deleteFollowing(follower, followee, true);
+	}
+}
+
+async function rejectFollowAll(followee: User) {
+	const followings = await Followings.find({
+		followeeId: followee.id
+	});
+
+	for (const following of followings) {
+		const follower = await Users.findOne({
+			id: following.followerId
+		});
+
+		if (follower == null) {
+			throw `Cant find follower ${following.followerId}`;
+		}
+
+		await rejectFollowing(followee, follower);
 	}
 }
 
