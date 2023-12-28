@@ -1311,6 +1311,7 @@ admin/views/instance.vue:
   disable-local-timeline: "Disable the Local Timeline"
   disable-global-timeline: "Disable global timeline"
   disabling-timelines-info: "Even if you disable these timelines, the administrator as well as moderators can use them continually."
+  authorized-public-timeline: "Require login to public timelines."
   authorized-profile-directory: "Require login to the profiles directory."
   disable-profile-directory: "Disable the profiles directory."
   enable-emoji-reaction: "Enable pictograms for reactions"

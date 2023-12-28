@@ -44,6 +44,13 @@ export const meta = {
 			}
 		},
 
+		authorizedPublicTimeline: {
+			validator: $.optional.nullable.bool,
+			desc: {
+				'ja-JP': 'ローカル、ソーシャル、グローバルタイムラインの表示に認証を必要とするか否か'
+			}
+		},
+
 		authorizedProfileDirectory: {
 			validator: $.optional.nullable.bool,
 			desc: {
@@ -453,6 +460,10 @@ export default define(meta, async (ps, me) => {
 
 	if (typeof ps.disableGlobalTimeline === 'boolean') {
 		set.disableGlobalTimeline = ps.disableGlobalTimeline;
+	}
+
+	if (typeof ps.authorizedPublicTimeline === 'boolean') {
+		set.authorizedPublicTimeline = ps.authorizedPublicTimeline;
 	}
 
 	if (typeof ps.authorizedProfileDirectory === 'boolean') {

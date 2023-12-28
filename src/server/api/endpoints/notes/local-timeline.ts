@@ -89,6 +89,9 @@ export default define(meta, async (ps, user) => {
 			throw new ApiError(meta.errors.ltlDisabled);
 		}
 	}
+	if (user == null && m.authorizedPublicTimeline) {
+		throw new ApiError(meta.errors.ltlDisabled);
+	}
 
 	//#region Construct query
 	const query = makePaginationQuery(Notes.createQueryBuilder('note'),
