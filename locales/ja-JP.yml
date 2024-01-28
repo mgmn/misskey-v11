@@ -615,6 +615,9 @@ common/views/components/user-menu.vue:
   unsuspend: "凍結解除"
   suspend-confirm: "このユーザーを凍結しますか？"
   unsuspend-confirm: "このユーザーを凍結解除しますか？"
+  delete: "削除"
+  delete-confirm: "このユーザーを削除しますか？"
+  deleted: "削除しました"
 
 common/views/components/poll.vue:
   vote-to: "「{}」に投票する"
