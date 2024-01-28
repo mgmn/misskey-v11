@@ -104,7 +104,7 @@ export function inbox(activity: IActivity, signature: httpSignature.IParsedSigna
 	});
 }
 
-export function createDeleteDriveFilesJob(user: ILocalUser) {
+export function createDeleteDriveFilesJob(user: User) {
 	return dbQueue.add('deleteDriveFiles', {
 		user: user
 	}, {
