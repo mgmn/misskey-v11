@@ -20,6 +20,12 @@ export const meta = {
 			code: 'NO_SUCH_GAME',
 			id: 'f13a03db-fae1-46c9-87f3-43c8165419e1'
 		},
+
+		accessDenied: {
+			message: 'Access denied.',
+			code: 'ACCESS_DENIED',
+			id: '46e43518-bded-11ee-993f-00155d2b705e'
+		},
 	}
 };
 
@@ -28,6 +34,10 @@ export default define(meta, async (ps, user) => {
 
 	if (game == null) {
 		throw new ApiError(meta.errors.noSuchGame);
+	}
+
+	if (user == null || (game.user1Id !== user.id && game.user2Id !== user.id)) {
+		throw new ApiError(meta.errors.accessDenied);
 	}
 
 	const o = new Reversi(game.map, {

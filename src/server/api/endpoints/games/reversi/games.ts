@@ -39,6 +39,9 @@ export default define(meta, async (ps, user) => {
 			.orWhere('game.user2Id = :userId', { userId: user.id });
 		}));
 	}
+	else {
+		return []
+	}
 
 	// Fetch games
 	const games = await query.take(ps.limit!).getMany();
