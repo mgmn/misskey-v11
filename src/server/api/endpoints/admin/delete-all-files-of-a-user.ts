@@ -1,8 +1,9 @@
 import $ from 'cafy';
 import define from '../../define';
-import { deleteFile } from '../../../../services/drive/delete-file';
-import { DriveFiles } from '../../../../models';
+import { Users } from '../../../../models';
+import { insertModerationLog } from '../../../../services/insert-moderation-log';
 import { ID } from '../../../../misc/cafy-id';
+import { createDeleteDriveFilesJob } from '../../../../queue';
 
 export const meta = {
 	tags: ['admin'],
@@ -22,11 +23,15 @@ export const meta = {
 };
 
 export default define(meta, async (ps, me) => {
-	const files = await DriveFiles.find({
-		userId: ps.userId
+	const user = await Users.findOne(ps.userId as string);
+
+	if (user == null) {
+		throw new Error('user not found');
+	}
+
+	insertModerationLog(me, 'deleteAllFiles', {
+		targetId: user.id,
 	});
 
-	for (const file of files) {
-		deleteFile(file);
-	}
+	createDeleteDriveFilesJob(user)
 });
