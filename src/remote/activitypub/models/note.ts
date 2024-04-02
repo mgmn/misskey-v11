@@ -14,7 +14,7 @@ import vote from '../../../services/note/polls/vote';
 import { apLogger } from '../logger';
 import { DriveFile } from '../../../models/entities/drive-file';
 import { deliverQuestionUpdate } from '../../../services/note/polls/update';
-import { extractDbHost, toPuny } from '../../../misc/convert-host';
+import { extractDbHost, isSelfOrigin, toPuny } from '../../../misc/convert-host';
 import { Emojis, Polls, MessagingMessages } from '../../../models';
 import { Note } from '../../../models/entities/note';
 import { IObject, getOneApId, getApId, validPost, IPost, isEmoji, getApType } from '../type';
@@ -140,9 +140,9 @@ export async function createNote(value: string | IObject, resolver?: Resolver, s
 		}).catch(async e => {
 			// トークだったらinReplyToのエラーは無視
 			const uri = getApId(note.inReplyTo);
-			if (uri.startsWith(config.url + '/')) {
+			if (isSelfOrigin(uri)) {
 				const id = uri.split('/').pop();
-				const talk = await MessagingMessages.findOne(id);
+				const talk = await MessagingMessages.findOne({ id: id });
 				if (talk) {
 					isTalk = true;
 					return null;
@@ -202,7 +202,7 @@ export async function createNote(value: string | IObject, resolver?: Resolver, s
 
 	// vote
 	if (reply && reply.hasPoll) {
-		const poll = await Polls.findOne(reply.id).then(ensure);
+		const poll = await Polls.findOne({ noteId: reply.id }).then(ensure);
 
 		const tryCreateVote = async (name: string, index: number): Promise<null> => {
 			if (poll.expiresAt && Date.now() > new Date(poll.expiresAt).getTime()) {
@@ -289,7 +289,7 @@ export async function resolveNote(value: string | IObject, resolver?: Resolver):
 		}
 		//#endregion
 
-		if (uri.startsWith(config.url)) {
+		if (isSelfOrigin(uri)) {
 			throw new StatusError('cannot resolve local note', 400, 'cannot resolve local note');
 		}
 

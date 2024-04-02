@@ -42,6 +42,9 @@ dependencies:
   '@swc/core':
     specifier: 1.3.107
     version: 1.3.107
+  '@twemoji/parser':
+    specifier: 15.1.0
+    version: 15.1.0
   abort-controller:
     specifier: 3.0.0
     version: 3.0.0
@@ -237,9 +240,6 @@ dependencies:
   loader-utils:
     specifier: 2.0.4
     version: 2.0.4
-  memoji:
-    specifier: mei23/memoji#15.0.1
-    version: github.com/mei23/memoji/2ac2e9ba5b82b017373dda6ccf745dc315aa1592
   moji:
     specifier: 0.5.1
     version: 0.5.1
@@ -376,8 +376,8 @@ dependencies:
     specifier: 7.1.0
     version: 7.1.0(stylus@0.59.0)(webpack@5.76.0)
   summaly:
-    specifier: mei23/summaly#3.11.0
-    version: github.com/mei23/summaly/d18b9e7647b688fc31ae902511dcd488e07d401f
+    specifier: mei23/summaly#3.13.0
+    version: github.com/mei23/summaly/db9600aa73d8747c0fd83f7e3da298273ec1fd3c
   syslog-pro:
     specifier: 1.0.0
     version: 1.0.0
@@ -408,9 +408,6 @@ dependencies:
   ts-node:
     specifier: 10.9.1
     version: 10.9.1(@swc/core@1.3.107)(@types/node@18.11.18)(typescript@4.9.5)
-  twemoji-parser:
-    specifier: git+https://github.com/mei23/twemoji-parser.git#15.0.1
-    version: github.com/mei23/twemoji-parser/75831bfddb415cefc1e89ac5232e883daf91a624
   typeorm:
     specifier: 0.2.38
     version: 0.2.38(pg@8.8.0)(redis@3.1.2)
@@ -1247,6 +1244,10 @@ packages:
 
   /@tsconfig/node16@1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
+    dev: false
+
+  /@twemoji/parser@15.1.0:
+    resolution: {integrity: sha512-3HTiSxPvkWUJ4kZeCvwyKlIwkpTUfBOk6igpBBRQni58ceQMv5YK4smkc8vX/eqOlMMNER/9qobv+Q6Q8LVrqA==}
     dev: false
 
   /@types/accepts@1.3.5:
@@ -3746,6 +3747,15 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
 
+  /crossws@0.2.4:
+    resolution: {integrity: sha512-DAxroI2uSOgUKLz00NX6A8U/8EE3SZHmIND+10jkVSaypvyt57J5JEOxAQOL6lQxyzi/wZbTIwssU1uy69h5Vg==}
+    peerDependencies:
+      uWebSockets.js: '*'
+    peerDependenciesMeta:
+      uWebSockets.js:
+        optional: true
+    dev: false
+
   /css-declaration-sorter@6.3.1(postcss@8.4.31):
     resolution: {integrity: sha512-fBffmak0bPAnyqc/HO8C3n2sHrp9wcqQz6ES9koRF2/mLOVAx9zIQ3Y7R29sYCteTPqMCwns4WYQoCX91Xl3+w==}
     engines: {node: ^10 || ^12 || >=14}
@@ -4135,8 +4145,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /destr@2.0.2:
-    resolution: {integrity: sha512-65AlobnZMiCET00KaFFjUefxDX0khFA/E4myqZ7a6Sq1yZtR8+FVIvilVX66vF2uobSumxooYZChiRPCKNqhmg==}
+  /destr@2.0.3:
+    resolution: {integrity: sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==}
     dev: false
 
   /destroy@1.2.0:
@@ -5440,20 +5450,26 @@ packages:
       '@sinclair/typebox': 0.25.24
       ajv: 8.12.0
       ajv-formats: 2.1.1(ajv@8.12.0)
-      h3: 1.9.0
+      h3: 1.11.1
+    transitivePeerDependencies:
+      - uWebSockets.js
     dev: false
 
-  /h3@1.9.0:
-    resolution: {integrity: sha512-+F3ZqrNV/CFXXfZ2lXBINHi+rM4Xw3CDC5z2CDK3NMPocjonKipGLLDSkrqY9DOrioZNPTIdDMWfQKm//3X2DA==}
+  /h3@1.11.1:
+    resolution: {integrity: sha512-AbaH6IDnZN6nmbnJOH72y3c5Wwh9P97soSVdGSBbcDACRdkC0FEWf25pzx4f/NuOCK6quHmW18yF2Wx+G4Zi1A==}
     dependencies:
       cookie-es: 1.0.0
+      crossws: 0.2.4
       defu: 6.1.4
-      destr: 2.0.2
+      destr: 2.0.3
       iron-webcrypto: 1.0.0
+      ohash: 1.1.3
       radix3: 1.1.0
-      ufo: 1.3.2
+      ufo: 1.5.3
       uncrypto: 0.1.3
       unenv: 1.9.0
+    transitivePeerDependencies:
+      - uWebSockets.js
     dev: false
 
   /has-ansi@2.0.0:
@@ -5579,8 +5595,8 @@ packages:
       whatwg-encoding: 2.0.0
     dev: false
 
-  /html-entities@2.4.0:
-    resolution: {integrity: sha512-igBTJcNNNhvZFRtm8uA6xMY6xYleeDwn3PeBCkDz7tHttv4F2hsDI2aPgNERWzvRcNYHNT3ymRaQzllmXj4YsQ==}
+  /html-entities@2.5.2:
+    resolution: {integrity: sha512-K//PSRMQk4FZ78Kyau+mZurHn3FH0Vwr+H36eE0rPbeYkRRi9YxceYPhuN60UwWorxyKHhqoAJl2OFKa4BVtaA==}
     dev: false
 
   /html-minifier@4.0.0:
@@ -7368,6 +7384,10 @@ packages:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
     dev: false
 
+  /node-ensure@0.0.0:
+    resolution: {integrity: sha512-DRI60hzo2oKN1ma0ckc6nQWlHU69RH6xN0sjQTjMpChPfTYvKZdcQFfdYK2RWbJcKyUizSIy/l8OTGxMAM1QDw==}
+    dev: false
+
   /node-fetch-native@1.6.1:
     resolution: {integrity: sha512-bW9T/uJDPAJB2YNYEpWzE54U5O3MQidXsOyTfnbKYtTtFexRvGzb1waphBN4ZwP6EcIvYYEOwW0b72BpAqydTw==}
     dev: false
@@ -7589,6 +7609,10 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.1.4
       es-abstract: 1.21.1
+    dev: false
+
+  /ohash@1.1.3:
+    resolution: {integrity: sha512-zuHHiGTYTA1sYJ/wZN+t5HKZaH23i4yI1HMwbuXm24Nid7Dv0KcuRlKoNKS9UNfAVSBlnGLcuQrnOKWOZoEGaw==}
     dev: false
 
   /on-finished@2.4.1:
@@ -7855,6 +7879,16 @@ packages:
 
   /pathe@1.1.1:
     resolution: {integrity: sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==}
+    dev: false
+
+  /pdf-parse@1.1.1:
+    resolution: {integrity: sha512-v6ZJ/efsBpGrGGknjtq9J/oC8tZWq0KWL5vQrk2GlzLEQPUDB1ex+13Rmidl1neNN358Jn9EHZw5y07FFtaC7A==}
+    engines: {node: '>=6.8.1'}
+    dependencies:
+      debug: 3.2.7
+      node-ensure: 0.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /peek-readable@4.1.0:
@@ -10313,14 +10347,14 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
-  /typescript@5.3.3:
-    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+  /typescript@5.4.2:
+    resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: false
 
-  /ufo@1.3.2:
-    resolution: {integrity: sha512-o+ORpgGwaYQXgqGDwd+hkS4PuZ3QnmqMMxRuajK/a38L6fTpcE5GPIfrf+L/KemFzfUpeUQc1rRS1iDBozvnFA==}
+  /ufo@1.5.3:
+    resolution: {integrity: sha512-Y7HYmWaFwPUmkoQCUIAYpKqkOf+SbVj/2fJJZ4RJMCfZp0rTGwRbzQD+HghfnhKOjL9E01okqz+ncJskGYfBNw==}
     dev: false
 
   /uglify-js@3.17.4:
@@ -11349,32 +11383,24 @@ packages:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
     dev: false
 
-  github.com/mei23/memoji/2ac2e9ba5b82b017373dda6ccf745dc315aa1592:
-    resolution: {tarball: https://codeload.github.com/mei23/memoji/tar.gz/2ac2e9ba5b82b017373dda6ccf745dc315aa1592}
-    name: memoji
-    version: 15.0.1
-    dev: false
-
-  github.com/mei23/summaly/d18b9e7647b688fc31ae902511dcd488e07d401f:
-    resolution: {tarball: https://codeload.github.com/mei23/summaly/tar.gz/d18b9e7647b688fc31ae902511dcd488e07d401f}
+  github.com/mei23/summaly/db9600aa73d8747c0fd83f7e3da298273ec1fd3c:
+    resolution: {tarball: https://codeload.github.com/mei23/summaly/tar.gz/db9600aa73d8747c0fd83f7e3da298273ec1fd3c}
     name: summaly
-    version: 3.11.0
+    version: 3.13.0
     dependencies:
       cheerio: 1.0.0-rc.12
       escape-regexp: 0.0.1
       got: 11.8.6
-      h3: 1.9.0
+      h3: 1.11.1
       h3-typebox: 0.6.0
-      html-entities: 2.4.0
+      html-entities: 2.5.2
       iconv-lite: 0.6.3
       js-yaml: 4.1.0
       jschardet: 3.0.0
+      pdf-parse: 1.1.1
       private-ip: 2.3.4
-      typescript: 5.3.3
-    dev: false
-
-  github.com/mei23/twemoji-parser/75831bfddb415cefc1e89ac5232e883daf91a624:
-    resolution: {tarball: https://codeload.github.com/mei23/twemoji-parser/tar.gz/75831bfddb415cefc1e89ac5232e883daf91a624}
-    name: twemoji-parser
-    version: 15.0.1
+      typescript: 5.4.2
+    transitivePeerDependencies:
+      - supports-color
+      - uWebSockets.js
     dev: false

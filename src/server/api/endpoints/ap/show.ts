@@ -5,7 +5,7 @@ import { createPerson } from '../../../../remote/activitypub/models/person';
 import { createNote } from '../../../../remote/activitypub/models/note';
 import Resolver from '../../../../remote/activitypub/resolver';
 import { ApiError } from '../../error';
-import { extractDbHost } from '../../../../misc/convert-host';
+import { extractDbHost, isSelfOrigin } from '../../../../misc/convert-host';
 import { Users, Notes } from '../../../../models';
 import { Note } from '../../../../models/entities/note';
 import { User } from '../../../../models/entities/user';
@@ -53,13 +53,13 @@ export default define(meta, async (ps) => {
  */
 async function fetchAny(uri: string) {
 	// URIがこのサーバーを指しているなら、ローカルユーザーIDとしてDBからフェッチ
-	if (uri.startsWith(config.url + '/')) {
+	if (isSelfOrigin(uri)) {
 		const parts = uri.split('/');
 		const id = parts.pop();
 		const type = parts.pop();
 
 		if (type === 'notes') {
-			const note = await Notes.findOne(id);
+			const note = await Notes.findOne({ id: id });
 
 			if (note) {
 				return {
@@ -68,7 +68,7 @@ async function fetchAny(uri: string) {
 				};
 			}
 		} else if (type === 'users') {
-			const user = await Users.findOne(id);
+			const user = await Users.findOne({ id: id });
 
 			if (user) {
 				return {
@@ -101,13 +101,13 @@ async function fetchAny(uri: string) {
 	// /@user のような正規id以外で取得できるURIが指定されていた場合、ここで初めて正規URIが確定する
 	// これはDBに存在する可能性があるため再度DB検索
 	if (uri !== object.id) {
-		if (object.id.startsWith(config.url + '/')) {
+		if (isSelfOrigin(object.id)) {
 			const parts = object.id.split('/');
 			const id = parts.pop();
 			const type = parts.pop();
 
 			if (type === 'notes') {
-				const note = await Notes.findOne(id);
+				const note = await Notes.findOne({ id: id });
 
 				if (note) {
 					return {
@@ -116,7 +116,7 @@ async function fetchAny(uri: string) {
 					};
 				}
 			} else if (type === 'users') {
-				const user = await Users.findOne(id);
+				const user = await Users.findOne({ id: id });
 
 				if (user) {
 					return {

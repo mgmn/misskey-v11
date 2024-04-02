@@ -21,7 +21,7 @@ import { genId } from '../../../misc/gen-id';
 import { instanceChart, usersChart } from '../../../services/chart';
 import { UserPublickey } from '../../../models/entities/user-publickey';
 import { isDuplicateKeyValueError } from '../../../misc/is-duplicate-key-value-error';
-import { toPuny } from '../../../misc/convert-host';
+import { isSelfOrigin, toPuny } from '../../../misc/convert-host';
 import { UserProfile } from '../../../models/entities/user-profile';
 import { getConnection, Not } from 'typeorm';
 import { ensure } from '../../../prelude/ensure';
@@ -96,9 +96,9 @@ export async function fetchPerson(uri: string, resolver?: Resolver): Promise<Use
 	if (typeof uri !== 'string') throw new Error('uri is not string');
 
 	// URIがこのサーバーを指しているならデータベースからフェッチ
-	if (uri.startsWith(config.url + '/')) {
+	if (isSelfOrigin(uri)) {
 		const id = uri.split('/').pop();
-		return await Users.findOne(id).then(x => x || null);
+		return await Users.findOne({ id: id }).then(x => x || null);
 	}
 
 	//#region このサーバーに既に登録されていたらそれを返す
@@ -118,7 +118,7 @@ export async function fetchPerson(uri: string, resolver?: Resolver): Promise<Use
 export async function createPerson(uri: string, resolver?: Resolver): Promise<User> {
 	if (typeof uri !== 'string') throw new Error('uri is not string');
 
-	if (uri.startsWith(config.url)) {
+	if (isSelfOrigin(uri)) {
 		throw new StatusError('cannot resolve local user', 400, 'cannot resolve local user');
 	}
 
@@ -278,7 +278,7 @@ export async function updatePerson(uri: string, resolver?: Resolver | null, hint
 	if (typeof uri !== 'string') throw new Error('uri is not string');
 
 	// URIがこのサーバーを指しているならスキップ
-	if (uri.startsWith(config.url + '/')) {
+	if (isSelfOrigin(uri)) {
 		return;
 	}
 
@@ -435,7 +435,7 @@ export function analyzeAttachments(attachments: IObject | IObject[] | undefined)
 }
 
 export async function updateFeatured(userId: User['id'], resolver?: Resolver) {
-	const user = await Users.findOne(userId).then(ensure);
+	const user = await Users.findOne({ id: userId }).then(ensure);
 	if (!Users.isRemoteUser(user)) return;
 	if (!user.featured) return;
 
