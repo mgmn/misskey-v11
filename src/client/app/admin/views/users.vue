@@ -20,6 +20,7 @@
 					<ui-horizon-group>
 						<ui-button @click="suspendUser" :disabled="suspending"><fa :icon="faSnowflake"/> {{ $t('suspend') }}</ui-button>
 						<ui-button @click="unsuspendUser" :disabled="unsuspending">{{ $t('unsuspend') }}</ui-button>
+						<ui-button @click="deleteUser(user.username)">{{ $t('delete') }}</ui-button>
 					</ui-horizon-group>
 					<ui-button @click="deleteAllFiles"><fa :icon="faTrashAlt"/> {{ $t('delete-all-files') }}</ui-button>
 					<ui-textarea v-if="user" :value="user | json5" readonly tall style="margin-top:16px;"></ui-textarea>
@@ -91,6 +92,7 @@ export default Vue.extend({
 			target: null,
 			suspending: false,
 			unsuspending: false,
+			deleting: false,
 			sort: '+createdAt',
 			state: 'all',
 			origin: 'local',
@@ -285,6 +287,26 @@ export default Vue.extend({
 
 			this.unsuspending = false;
 
+			this.refreshUser();
+		},
+
+		async deleteUser() {
+			if (!await this.getConfirmed(this.$t('delete-confirm'))) return;
+			this.deleting = true;
+			const process = async () => {
+				await this.$root.api('admin/delete-user', { userId: this.user.id });
+				this.$root.dialog({
+					type: 'success',
+					text: this.$t('deleted')
+				});
+			};
+			await process().catch(e => {
+				this.$root.dialog({
+					type: 'error',
+					text: e.toString()
+				});
+			});
+			this.deleting = false;
 			this.refreshUser();
 		},
 
