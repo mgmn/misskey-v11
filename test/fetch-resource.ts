@@ -12,7 +12,7 @@ process.env.NODE_ENV = 'test';
 
 import * as assert from 'assert';
 import * as childProcess from 'child_process';
-import { async, startServer, signup, post, api, simpleGet, port, shutdownServer, uploadFile, getDocument } from './utils';
+import { async, startServer, signup, post, api, simpleGet, port, shutdownServer, uploadFile, getDocument, getJsonDocument } from './utils';
 import * as openapi from '@redocly/openapi-core';
 import rndstr from 'rndstr';
 import { randomUUID } from 'crypto';
@@ -49,6 +49,7 @@ describe('Fetch resource', () => {
 	let video: any;
 	let alicesPostVideo: any;
 	let page: any;
+	let mbNameFile: any;
 
 	before(async () => {
 		p = await startServer();
@@ -118,6 +119,9 @@ describe('Fetch resource', () => {
 			fileIds: [ video.id ],
 		});
 		//console.log('alicesPostVideo', alicesPostVideo);
+
+		// upload multi-byte named file
+		mbNameFile = await uploadFile(alice, 'あいう.txt');
 
 		const pageRes = await api('pages/create', {
 			title: '',
@@ -234,6 +238,11 @@ describe('Fetch resource', () => {
 			const res = await simpleGet('/apple-touch-icon.png');
 			assert.strictEqual(res.status, 200);
 			assert.strictEqual(res.type, 'image/png');
+		}));
+
+		it('Validate uploaded multi-byte filename', (async () => {
+			const json = await getJsonDocument('/api/drive/files/show', {'i': alice.token, 'fileId': mbNameFile.id});
+			assert.strictEqual(json.name, 'あいう.txt');
 		}));
 	});
 
