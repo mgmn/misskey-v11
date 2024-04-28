@@ -74,10 +74,10 @@ export default Vue.extend({
 					const data = new FormData();
 					data.append('i', this.$store.state.i.token);
 					data.append('force', 'true');
-					data.append('file', file);
+					data.append('file', file, encodeURIComponent(file.name));
 
 					if (folder) data.append('folderId', folder);
-					if (name) data.append('name', name);
+					if (name) data.append('name', encodeURIComponent(name));
 
 					const xhr = new XMLHttpRequest();
 					xhr.open('POST', apiUrl + '/drive/files/create', true);
