@@ -81,6 +81,10 @@ export const meta = {
 export default define(meta, async (ps, user, app, file, cleanup) => {
 	// Get 'name' parameter
 	let name = ps.name || file.originalname;
+	try {
+		name = decodeURIComponent(name);
+	} catch (e) {}
+
 	if (name !== undefined && name !== null) {
 		name = name.trim();
 		if (name.length === 0) {
