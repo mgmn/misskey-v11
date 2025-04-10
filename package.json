@@ -44,7 +44,7 @@
 		"@koa/router": "8.0.8",
 		"@ladjs/koa-views": "9.0.0",
 		"@peertube/http-signature": "1.7.0",
-		"@swc/core": "1.4.12",
+		"@swc/core": "1.11.16",
 		"@twemoji/parser": "15.1.1",
 		"abort-controller": "3.0.0",
 		"animejs": "3.2.1",
@@ -100,8 +100,8 @@
 		"json5-loader": "4.0.1",
 		"jsonld": "8.3.2",
 		"jsrsasign": "11.0.0",
-		"katex": "0.16.10",
-		"koa": "2.13.4",
+		"katex": "0.16.21",
+		"koa": "2.16.1",
 		"koa-bodyparser": "4.3.0",
 		"koa-favicon": "2.1.0",
 		"koa-logger": "3.2.1",
@@ -149,7 +149,7 @@
 		"rndstr": "1.0.0",
 		"s-age": "1.1.2",
 		"seedrandom": "3.0.5",
-		"sharp": "0.32.6",
+		"sharp": "0.34.0",
 		"showdown": "2.1.0",
 		"showdown-highlightjs-extension": "0.1.2",
 		"speakeasy": "2.0.0",
@@ -223,7 +223,7 @@
 		"@types/koa__router": "8.0.11",
 		"@types/lolex": "5.1.2",
 		"@types/mocha": "10.0.1",
-		"@types/node": "22.10.2",
+		"@types/node": "22.14.0",
 		"@types/nodemailer": "6.4.7",
 		"@types/nprogress": "0.2.0",
 		"@types/oauth": "0.9.1",
@@ -239,7 +239,7 @@
 		"@types/rename": "1.0.4",
 		"@types/request-stats": "3.0.0",
 		"@types/seedrandom": "3.0.5",
-		"@types/sharp": "0.31.1",
+		"@types/sharp": "0.32.0",
 		"@types/showdown": "2.0.0",
 		"@types/speakeasy": "2.0.7",
 		"@types/tinycolor2": "1.4.3",
@@ -255,5 +255,5 @@
 		"eslint-plugin-node": "11.1.0",
 		"mocha": "10.2.0"
 	},
-	"packageManager": "pnpm@9.5.0"
+	"packageManager": "pnpm@10.7.1"
 }
