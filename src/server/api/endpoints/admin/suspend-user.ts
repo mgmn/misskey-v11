@@ -1,9 +1,7 @@
 import $ from 'cafy';
 import { ID } from '../../../../misc/cafy-id';
 import define from '../../define';
-import deleteFollowing from '../../../../services/following/delete';
-import { Users, Followings, Notifications } from '../../../../models';
-import { User } from '../../../../models/entities/user';
+import { Users } from '../../../../models';
 import { insertModerationLog } from '../../../../services/insert-moderation-log';
 import { doPostSuspend } from '../../../../services/suspend-user';
 import { publishTerminate } from '../../../../services/server-event';
@@ -57,36 +55,5 @@ export default define(meta, async (ps, me) => {
 		publishTerminate(user.id);
 	}
 
-	(async () => {
-		await doPostSuspend(user).catch(e => {});
-		await unFollowAll(user).catch(e => {});
-		await readAllNotify(user).catch(e => {});
-	})();
+	doPostSuspend(user);
 });
-
-async function unFollowAll(follower: User) {
-	const followings = await Followings.find({
-		followerId: follower.id
-	});
-
-	for (const following of followings) {
-		const followee = await Users.findOne({
-			id: following.followeeId
-		});
-
-		if (followee == null) {
-			throw `Cant find followee ${following.followeeId}`;
-		}
-
-		await deleteFollowing(follower, followee, true);
-	}
-}
-
-async function readAllNotify(notifier: User) {
-	await Notifications.update({
-		notifierId: notifier.id,
-		isRead: false,
-	}, {
-		isRead: true
-	});
-}
